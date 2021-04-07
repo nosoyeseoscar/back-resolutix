@@ -1,11 +1,16 @@
+//requerimos el codigo que hace la conexion
+require('./mongo')
+
 const express = require('express')
 const cors = require('cors')//evita problemas de origenes CORS
 const app = express()
+//importamos el modelo para hacer uso del modelo mongoose
+const Docto = require('./models/Docs')
 
 app.use(express.json()) // habilitamos el parser de express para Json y poder enviar json al cliente.
 app.use(cors())//habilitamos cualquier origen.
 
-let documentsTest = [
+/* let documentsTest = [
   {
     id: 1,
     numOf: '03-BS-001',
@@ -24,7 +29,7 @@ let documentsTest = [
     promovente: 'Fulanito de Tal',
     tipo: 'Requerimiento'
   }
-]
+] */
 
 /* const app = http.createServer((request, response)=>{
     response.writeHead(200, {'Content-Type': 'text/plain'})
@@ -38,7 +43,10 @@ app.get('/', (request, response) => {
 
 // ruta recuperar todos los documentos
 app.get('/api/documents', (request, response) => {
-  response.json(documentsTest)
+  Docto.find()
+  .then(results=>{
+    response.json(results)
+  }).catch(err=>{console.error(err)})
 })
 
 // ruta recuperar documento unico
