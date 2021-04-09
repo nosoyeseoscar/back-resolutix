@@ -1,11 +1,13 @@
 //usamos mongoose, declaramos la conexion.
 const mongoose = require('mongoose')
-const passDB = require('./password')
+//const passDB = require('./password')
 
 //nombre de base de datos
 const dataBaseName = 'documentosDB'
 
-const connectionString = `mongodb+srv://test-user:${passDB}@cluster0.5yemr.mongodb.net/${dataBaseName}?retryWrites=true&w=majority`
+//const connectionString = `mongodb+srv://test-user:${passDB}@cluster0.5yemr.mongodb.net/${dataBaseName}?retryWrites=true&w=majority`
+
+const connectionString = process.env.MONGO_DB_URI
 
 //conexion a mongoDB
 mongoose.connect(connectionString, {
@@ -20,6 +22,10 @@ mongoose.connect(connectionString, {
         console.error(err)
     })
 
+//buena practica de cerrar conexion cuando ha habido un problema
+process.on('uncaughtException', () => {
+    mongoose.connection.disconnect()
+})
 
 
 /*Para comprobar que se grabo informacion*/ 
